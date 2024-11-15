@@ -1,25 +1,64 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import React, { useContext } from 'react';
+import { Image, StyleSheet, Platform, Button } from 'react-native';
 
 import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { AppContext } from '../../Context/useContext';
+
+// importing Components
+import AmountInfo from '../../components/amountInfo';
+import StudentInfo from '../../components/studentInfo';
+import NotificationMessage  from '../../components/NotificationMessage';
 
 export default function HomeScreen() {
+  const context = useContext(AppContext);
+  
+  if (!context) {
+      throw new Error('HomeScreen must be used within an AppProvider');
+  }
+  
+  const { user, setUser, student, setStudent } = context;
+  
+  const handleLogin = () => {
+      // Simulate a login action
+      setUser({ name: 'John Doe', email: 'john@example.com' });
+      setStudent({
+        name: "Peter",
+        last_name: "Doe",
+        DOB: new Date('2005-06-15'), // Example date
+        gender: "Male"
+      });
+  };
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
+    <ThemedView style={styles.container}>
+       {user ? (
+                <ThemedView style={styles.info}>
+                  <ThemedView>
+                    <ThemedView style={styles.titleContainer}>
+                      <ThemedText type="title">Welcome! {user.name}</ThemedText>
+                      <HelloWave />
+                    </ThemedView>
+                    <AmountInfo amountDue={'USD 1,500.00'} payBeforeDate={'Nov 15, 2024'}/>
+                  </ThemedView>
+                  <ThemedView style={styles.titleContainer}>
+                    <ThemedView style={styles.info}>
+                    {student ? 
+                      <StudentInfo information={'Field Day Trip Friday 23 de 8am a 1pm'} studentName={student.name} />
+                    : 'No Student Assigned'  
+                    }
+                    </ThemedView>
+                  </ThemedView>
+                  <NotificationMessage amountDue={'1500.00'}/>
+                </ThemedView>
+                
+            ) : (
+                <Button title="Login" onPress={handleLogin} />
+            )}
+
+      {/* Other content remains unchanged */}
+      {/* <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Step 1: Try it</ThemedText>
         <ThemedText>
           Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
@@ -33,42 +72,31 @@ export default function HomeScreen() {
           </ThemedText>{' '}
           to open developer tools.
         </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+      </ThemedView> */}
+      {/* Additional steps omitted for brevity */}
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginTop: 30
+  },
+  info: {
+    flexDirection: 'column'
+  },
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+    marginTop: 20,
+    marginBottom: 20,
+    alignSelf: 'center',
+    justifyContent: 'center'
   },
   stepContainer: {
     gap: 8,
     marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
   },
 });

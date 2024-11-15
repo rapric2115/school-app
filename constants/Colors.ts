@@ -17,10 +17,34 @@ export const Colors = {
   },
   dark: {
     text: '#ECEDEE',
-    background: '#151718',
+    background: '#000B58',
     tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
+    icon: '#FFF4B7',
+    tabIconDefault: '#FFF4B7',
     tabIconSelected: tintColorDark,
   },
 };
+
+export const ComponentBG = {
+  light: {
+    backgroundColor: tintColorLight,
+    text: '#11181C'
+  },
+  dark: {
+    backgroundColor: '#003161',
+    text: '#FFF4B7'
+  }
+}
+
+export const BtnColor = {
+  light: {
+    backgroundColor: '#006A67',
+    text: '#11181C'
+  },
+  dark: {
+    backgroundColor: '#ff6500',
+    text: '#FFF4B7',
+    FontWeight: 'bold',
+    FontSize: 18
+  }
+}

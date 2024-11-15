@@ -1,26 +1,26 @@
+import React, { useContext } from 'react';
 import { StyleSheet, Image, Platform } from 'react-native';
 
 import { Collapsible } from '@/components/Collapsible';
 import { ExternalLink } from '@/components/ExternalLink';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
+import { HelloWave } from '@/components/HelloWave';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
+import { AppContext } from '../../Context/useContext';
 
 export default function TabTwoScreen() {
+  const context = useContext(AppContext);
+  const { user } = context;
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
-      headerImage={
-        <IconSymbol
-          size={310}
-          color="#808080"
-          name="chevron.left.forwardslash.chevron.right"
-          style={styles.headerImage}
-        />
-      }>
+    <ThemedView style={styles.Container}>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Explore</ThemedText>
+        <ThemedText type="title">Welcome! {user.name}</ThemedText>
+        <HelloWave />
+      </ThemedView>
+      <ThemedView>
+        <ThemedText style={{marginLeft: 15}}>Statement</ThemedText>
       </ThemedView>
       <ThemedText>This app includes example code to help you get started.</ThemedText>
       <Collapsible title="File-based routing">
@@ -91,11 +91,15 @@ export default function TabTwoScreen() {
           ),
         })}
       </Collapsible>
-    </ParallaxScrollView>
+      </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
+  Container: {
+    flex: 1,
+    marginTop: 30
+  },
   headerImage: {
     color: '#808080',
     bottom: -90,
@@ -105,5 +109,6 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: 'row',
     gap: 8,
+    padding: 15
   },
 });

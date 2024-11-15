@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { Platform } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 
 import { HapticTab } from '@/components/HapticTab';
 import { IconSymbol } from '@/components/ui/IconSymbol';
@@ -8,8 +8,38 @@ import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
+// importing tabBar icons
+import HomeIcon from '../../assets/tabIcons/home_icon';
+import DolarIcon from '../../assets/tabIcons/dollar_icon';
+import Statement from '../../assets/tabIcons/statement_icon';
+import Wallet from '../../assets/tabIcons/wallet_icon';
+
+
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+
+  const tabsNav = [
+    { 
+      name: 'index',
+      title: 'Home',
+      icon: HomeIcon 
+    },
+    {
+      name: 'payments',
+      title: 'Payments',
+      icon: DolarIcon
+    },
+    {
+      name: 'explore',
+      title: 'Statement',
+      icon: Statement
+    },
+    {
+      name: 'wallet',
+      title: 'Wallet',
+      icon: Wallet
+    }
+  ]
 
   return (
     <Tabs
@@ -26,20 +56,25 @@ export default function TabLayout() {
           default: {},
         }),
       }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-        }}
-      />
+        {tabsNav.map((tab) => (
+        <Tabs.Screen
+        key={tab.name}
+        name={tab.name}
+          options={{
+            title: tab.title,
+            tabBarIcon: ({ color }) => <tab.icon size={28}  color={color} style={styles.icon}/>,
+          }}
+        />
+        ))}
+      
     </Tabs>
   );
 }
+
+
+const styles = StyleSheet.create({
+  icon: {
+    justifyContent: 'center',
+    alignSelf: 'center'
+  }
+})
