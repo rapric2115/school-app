@@ -82,7 +82,7 @@ const Payments = (props: any) => {
         <ThemedText style={{marginLeft: 15}}>Select your Payment Option</ThemedText>
       </ThemedView>
         {payment.map((pay) => (
-        <ThemedView style={{flexDirection: 'row', justifyContent: 'space-around', marginTop: 15, backgroundColor: ComponentBG.dark.backgroundColor,
+        <ThemedView key={pay.id} style={{flexDirection: 'row', justifyContent: 'space-around', marginTop: 15, backgroundColor: ComponentBG.dark.backgroundColor,
           borderRadius: 10, padding: 10, width: WIDTH * .95, alignSelf: 'center'
         }}>
             <ThemedView style={{backgroundColor: ComponentBG.dark.backgroundColor}}>
