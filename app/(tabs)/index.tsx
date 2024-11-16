@@ -18,17 +18,12 @@ export default function HomeScreen() {
       throw new Error('HomeScreen must be used within an AppProvider');
   }
   
-  const { user, setUser, student, setStudent } = context;
+  const { user, setUser, students } = context;
   
   const handleLogin = () => {
       // Simulate a login action
       setUser({ name: 'John Doe', email: 'john@example.com' });
-      setStudent({
-        name: "Peter",
-        last_name: "Doe",
-        DOB: new Date('2005-06-15'), // Example date
-        gender: "Male"
-      });
+      
   };
 
   return (
@@ -44,13 +39,13 @@ export default function HomeScreen() {
                   </ThemedView>
                   <ThemedView style={styles.titleContainer}>
                     <ThemedView style={styles.info}>
-                    {student ? 
-                      <StudentInfo information={'Field Day Trip Friday 23 de 8am a 1pm'} studentName={student.name} />
+                    {students ? 
+                      <StudentInfo />
                     : 'No Student Assigned'  
                     }
                     </ThemedView>
                   </ThemedView>
-                  <NotificationMessage amountDue={'1500.00'}/>
+                 
                 </ThemedView>
                 
             ) : (

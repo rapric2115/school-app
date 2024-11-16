@@ -1,65 +1,42 @@
-import { StyleSheet, Text, View, Dimensions } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, Dimensions } from 'react-native';
+import React, { useContext } from 'react';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { ComponentBG } from '../constants/Colors';
-
-import { app } from '../firebase/firebase';
-import { getFirestore } from "firebase/firestore";
-import { collection, getDocs } from "firebase/firestore"; 
+import { AppContext } from '@/Context/useContext';
 
 const WIDTH = Dimensions.get("screen").width;
 const HEIGHT = Dimensions.get('screen').height;
 
-interface Student {
-  id: string; // Firestore document ID
-  name: string; // Example field
-  age?: number; // Optional field
-  grade?: string; // Optional field
-}
-
 const StudentInfo = (props: any) => {
-  const [studentData, setStudentData] = useState<any[]>([]); // State to hold student data
-  const [loading, setLoading] = useState(true); // State to manage loading status
+  const { students, loading } = useContext(AppContext);
 
-  useEffect(() => {
-    const fetchStudentData = async () => {
-      try {
-        const db = getFirestore(app);
-        const querySnapshot = await getDocs(collection(db, "students"));
-        const students: Student[] = [];
-        querySnapshot.forEach((doc) => {
-          students.push({ id: doc.id, ...doc.data() } as Student);
-        });
-        setStudentData(students); // Update state with fetched data
-        // console.log('Esta es la data del Estudiante:', students)
-      } catch (error) {
-        console.error("Error fetching student data: ", error);
-      } finally {
-        setLoading(false); // Set loading to false after fetching
-      }
-    };
+  console.log('Student Data from studentInfo: ', students)
 
-    fetchStudentData(); // Call the fetch function
-  }, []); // Empty dependency array means this runs once on mount
-
-
-  console.log('Data de Studiante ', studentData[0])
-
+  // Show loading state if loading is true
   if (loading) {
-    return <ThemedText>Loading...</ThemedText>; // Show loading state
+    return <ThemedText>Loading...</ThemedText>;
+  }
+
+  // Handle case where students might be null
+  if (!students) {
+    return <ThemedText>No student data available.</ThemedText>;
   }
 
   return (
     <ThemedView style={styles.Container}>
       <View>
         <ThemedText style={{ fontWeight: 'bold' }}>Important Information</ThemedText>
-        {/* Assuming studentData contains relevant information */}
-        {studentData.map((student) => (
-          <ThemedText key={student.id} style={styles.AmountText}>
-            Student {studentData[0].given_name} {studentData[0].last_name} {/* Adjust based on actual data structure */}
-          </ThemedText>
-        ))}
+        {/* Map over students and display their information */}
+        {students ? 
+          <View style={styles.Normal}>
+            <ThemedText key={students[0].id} style={styles.AmountText}>
+              Student: {students[0].given_name} {students[0].last_name} {/* Adjust based on actual data structure */}
+            </ThemedText>
+            <ThemedText style={styles.grade}>{students[0].grade}</ThemedText>
+            <ThemedText>{students[0].information}</ThemedText>
+          </View>
+        : <ThemedText>There is not student listed!</ThemedText>}
       </View>
     </ThemedView>
   );
@@ -80,8 +57,16 @@ const styles = StyleSheet.create({
   AmountText: {
     fontSize: 30,
     fontWeight: 'bold',
-    paddingTop: 15,
-    paddingBottom: 10,
-    height: HEIGHT * 0.10,
+    paddingTop: 10,
+    // paddingBottom: 10,
+    // height: HEIGHT * 0.1,
   },
+  Normal: {
+    height: HEIGHT * .10
+  },
+  grade: {
+    marginTop: 0,
+    fontWeight: 'bold',
+  },
+ 
 });
