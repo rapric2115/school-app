@@ -1,17 +1,15 @@
-import { StyleSheet, View, Dimensions } from 'react-native';
+import { StyleSheet, View, Dimensions, Pressable } from 'react-native';
 import React, { useContext } from 'react';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
-import { ComponentBG } from '../constants/Colors';
+import { ComponentBG, BtnColor } from '../constants/Colors';
 import { AppContext } from '@/Context/useContext';
 
 const WIDTH = Dimensions.get("screen").width;
-const HEIGHT = Dimensions.get('screen').height;
+const HEIGHT = Dimensions.get("screen").height;
 
-const StudentInfo = (props: any) => {
+const StudentInfo = () => {
   const { students, loading } = useContext(AppContext);
-
-  console.log('Student Data from studentInfo: ', students)
 
   // Show loading state if loading is true
   if (loading) {
@@ -19,26 +17,33 @@ const StudentInfo = (props: any) => {
   }
 
   // Handle case where students might be null
-  if (!students) {
+  if (!students || students.length === 0) {
     return <ThemedText>No student data available.</ThemedText>;
   }
 
+  console.log('Here is the student data from studentInfo: ', students[0].grade_score)
+
   return (
-    <ThemedView style={styles.Container}>
-      <View>
-        <ThemedText style={{ fontWeight: 'bold' }}>Important Information</ThemedText>
-        {/* Map over students and display their information */}
-        {students ? 
-          <View style={styles.Normal}>
-            <ThemedText key={students[0].id} style={styles.AmountText}>
-              Student: {students[0].given_name} {students[0].last_name} {/* Adjust based on actual data structure */}
-            </ThemedText>
-            <ThemedText style={styles.grade}>{students[0].grade}</ThemedText>
-            <ThemedText>{students[0].information}</ThemedText>
-          </View>
-        : <ThemedText>There is not student listed!</ThemedText>}
-      </View>
-    </ThemedView>
+    
+    <View>
+      {students.map((student: any, i: any) => (
+        <ThemedView  key={student.id} style={styles.Container}>
+            <ThemedText type='defaultSemiBold'>Important Information</ThemedText>
+            {/* Map over students and display their information */}
+              <View style={styles.Normal}>
+                <ThemedText style={styles.AmountText} type='defaultSemiBold'>
+                {i + 1} Student: {student.given_name} {student.last_name}
+                </ThemedText>
+                <ThemedText style={styles.grade} type='defaultSemiBold'>{student.grade}</ThemedText>
+                <ThemedText>{student.information}</ThemedText>
+                <Pressable onPress={() => alert(`You press my profile ${student.given_name}`)} style={styles.btn}>
+                  <ThemedText style={styles.btnText}>{student.given_name} Profile</ThemedText>
+                </Pressable>
+              </View>
+        </ThemedView>
+      ))}
+    </View>
+    
   );
 };
 
@@ -47,26 +52,36 @@ export default StudentInfo;
 const styles = StyleSheet.create({
   Container: {
     width: WIDTH * 0.95,
-    flexDirection: 'row',
+    flexDirection: 'column', // Change to column for vertical stacking
     backgroundColor: ComponentBG.dark.backgroundColor,
     alignSelf: 'center',
     padding: 20,
-    height: HEIGHT * 0.20,
     borderRadius: 10,
+    paddingBottom: 20,
+    marginVertical: 10
   },
   AmountText: {
     fontSize: 30,
-    fontWeight: 'bold',
     paddingTop: 10,
-    // paddingBottom: 10,
-    // height: HEIGHT * 0.1,
   },
   Normal: {
-    height: HEIGHT * .10
+    marginBottom: 10, // Add some spacing between student entries
   },
   grade: {
     marginTop: 0,
-    fontWeight: 'bold',
   },
- 
+  btn: {
+    width: WIDTH * .80,
+    height: HEIGHT * .05,
+    backgroundColor: BtnColor.dark.backgroundColor,
+    borderRadius: 10,
+    alignSelf: 'center',
+    justifyContent: 'center',
+    marginTop: 10,
+    marginBottom: 10
+  },
+  btnText: {
+    textAlign: 'center',
+    fontWeight: 'bold'
+  }
 });

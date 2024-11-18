@@ -33,6 +33,10 @@ export const ComponentBG = {
   dark: {
     backgroundColor: '#003161',
     text: '#FFF4B7'
+  },
+  message: {
+    backgroundColor: '#235235',
+    text: '#FFF4B7'
   }
 }
 

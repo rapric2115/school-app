@@ -1,16 +1,28 @@
 
 import { StyleSheet, Pressable, Dimensions, View, Text } from 'react-native'
-import React from 'react'
+import React, { useContext } from 'react'
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { Image } from 'expo-image';
 import  { ComponentBG, BtnColor } from '../constants/Colors';
+import { AppContext } from '@/Context/useContext';
+import MessageComponent from '@/components/MessageComponent';
 
 const WIDTH = Dimensions.get("screen").width;
 const HEIGHT = Dimensions.get('screen').height;
 
 const AmountInfo = (props: any) => {
   const label = "PAY";
+  const { totalTuition, payment, message } = useContext(AppContext);
+
+  const formatCurrency = (amount: number): string => {
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    }).format(amount);
+};
 
   return (
     <ThemedView style={styles.Container}>
@@ -25,10 +37,15 @@ const AmountInfo = (props: any) => {
         </View>
         <View >
             <ThemedText style={{fontWeight: 'bold'}}>Amount Due</ThemedText>
-            <ThemedText style={styles.AmountText}>{props.amountDue}</ThemedText>
+            <ThemedText style={styles.AmountText}>US {formatCurrency(totalTuition)}</ThemedText>
             <ThemedText style={{textTransform: 'uppercase'}}>Pay before {props.payBeforeDate}</ThemedText>
-            <Pressable style={styles.btn} onPress={() => alert('You Payments is been process.')}>
-              <Text style={styles.btnLabel}>{label}</Text>
+            {message !== null ?
+              <MessageComponent props={message} />
+                :
+              null
+            }
+            <Pressable style={styles.btn} onPress={() => payment(1500)}>
+              <ThemedText style={styles.btnLabel}>{label}</ThemedText>
             </Pressable>
         </View>
     </ThemedView>
@@ -44,7 +61,7 @@ const styles = StyleSheet.create({
     backgroundColor: ComponentBG.dark.backgroundColor,
     alignSelf: 'center',
     padding: 20,
-    height: HEIGHT * .20,
+    // height: HEIGHT * .22,
     borderRadius: 10
   },
   AmountText : {
@@ -64,7 +81,8 @@ const styles = StyleSheet.create({
     backgroundColor: BtnColor.dark.backgroundColor,
     borderRadius: 10,
     padding: 10,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginTop: 10
   },
   btnLabel: {
     color: BtnColor.dark.text,

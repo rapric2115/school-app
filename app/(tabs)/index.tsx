@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Image, StyleSheet, Platform, Button } from 'react-native';
+import { Image, StyleSheet, Platform, Button, ScrollView } from 'react-native';
 
 import { HelloWave } from '@/components/HelloWave';
 import { ThemedText } from '@/components/ThemedText';
@@ -27,6 +27,7 @@ export default function HomeScreen() {
   };
 
   return (
+    <ScrollView>
     <ThemedView style={styles.container}>
        {user ? (
                 <ThemedView style={styles.info}>
@@ -70,6 +71,7 @@ export default function HomeScreen() {
       </ThemedView> */}
       {/* Additional steps omitted for brevity */}
     </ThemedView>
+    </ScrollView>
   );
 }
 
