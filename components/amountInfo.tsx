@@ -13,16 +13,7 @@ const HEIGHT = Dimensions.get('screen').height;
 
 const AmountInfo = (props: any) => {
   const label = "PAY";
-  const { totalTuition, payment, message } = useContext(AppContext);
-
-  const formatCurrency = (amount: number): string => {
-    return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-    }).format(amount);
-};
+  const { totalTuition, payment, message, formatCurrency } = useContext(AppContext);
 
   return (
     <ThemedView style={styles.Container}>
@@ -39,7 +30,7 @@ const AmountInfo = (props: any) => {
             <ThemedText style={{fontWeight: 'bold'}}>Amount Due</ThemedText>
             <ThemedText style={styles.AmountText}>US {formatCurrency(totalTuition)}</ThemedText>
             <ThemedText style={{textTransform: 'uppercase'}}>Pay before {props.payBeforeDate}</ThemedText>
-            {message !== null ?
+            {message !== '' ?
               <MessageComponent props={message} />
                 :
               null

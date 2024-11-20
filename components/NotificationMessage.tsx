@@ -22,7 +22,7 @@ const NotificationMessage = (props: any) => {
     </View>
     <View style={{display:'flex', justifyContent: 'flex-end'}}>
         <ThemedText>Total Balance</ThemedText>
-        <ThemedText style={styles.AmountText}>US$ {props.amountDue}</ThemedText>
+        <ThemedText style={styles.AmountText}>US {props.amountDue}</ThemedText>
     </View>
 </ThemedView>
 

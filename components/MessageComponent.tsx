@@ -9,6 +9,7 @@ const WIDTH = Dimensions.get("screen").width;
 
 const MessageComponent = (props: any) => {
     const { message } = useContext(AppContext);
+
   return (
     <ThemedView style={styles.Container}>
       <ThemedText>{message}</ThemedText>
@@ -23,6 +24,7 @@ const styles = StyleSheet.create({
         backgroundColor: ComponentBG.message.backgroundColor,
         width: WIDTH * .55,
         padding: 10,
-        borderRadius: 10
+        borderRadius: 10,
+        alignSelf: 'center'
     }
 })

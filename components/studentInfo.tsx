@@ -37,7 +37,7 @@ const StudentInfo = () => {
                 <ThemedText style={styles.grade} type='defaultSemiBold'>{student.grade}</ThemedText>
                 <ThemedText>{student.information}</ThemedText>
                 <Pressable onPress={() => alert(`You press my profile ${student.given_name}`)} style={styles.btn}>
-                  <ThemedText style={styles.btnText}>{student.given_name} Profile</ThemedText>
+                  <ThemedText style={styles.btnText}>Go to {student.given_name} Profile</ThemedText>
                 </Pressable>
               </View>
         </ThemedView>

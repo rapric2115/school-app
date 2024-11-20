@@ -29,6 +29,7 @@ interface AppContextType {
     totalTuition: number; // Total tuition amount
     message: string;
     payment: (paymentAmount: number) => void; // Payment function declaration
+    formatCurrency: (paymentAmount: number) => void;
 }
 
 
@@ -43,19 +44,33 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     const [totalTuition, setTotalTuition] = useState<number>(0); // State for total tuition
     const [message, setMessage] = useState<string>(''); // State for
 
+    const formatCurrency = (amount: number): string => {
+        return new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        }).format(amount);
+    };
+
     const payment = (paymentAmount: number) => {
-        setMessage('Your Payment is being Processed...');
+        setMessage('Your Payment is being Process, please wait until confirmation...');
      if(totalTuition >= 0) {
          // Simulate processing time with a timeout
          setTimeout(() => {
              // Update total tuition only if paymentAmount is valid
              if (paymentAmount > 0) {
                  setTotalTuition(prevTotal => prevTotal - paymentAmount);
-                 setMessage(`Your Payment is Complete. You paid ${paymentAmount} for Tuition.`);
+                 setMessage(`Your Payment is Complete. You paid US ${formatCurrency(paymentAmount)} for your Tuition.`);
+
+                 setTimeout(() => {
+                    setMessage('')
+                 }, 5000)
              } else {
                  setMessage('Invalid payment amount.');
              }
-         }, 10000); // Simulate a 2-second processing time
+         }, 7000); // Simulate a 7-second processing time
+         
      } 
     };
 
@@ -93,7 +108,9 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     }, []); // Empty dependency array means this runs once on mount
 
     return (
-        <AppContext.Provider value={{ user, setUser, students, setStudents, loading, setLoading, totalTuition, message, payment }}>
+        <AppContext.Provider value={{ user, setUser, students, setStudents, loading, setLoading, totalTuition, message, payment,
+            formatCurrency
+         }}>
             {children}
         </AppContext.Provider>
     );
