@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
         top: HEIGHT * .75
     },
     buttonText: {
-        color: 'white',
+        color: '#FFD233',
         fontSize: 32,
         alignSelf: 'center',
         textAlign: 'center',
