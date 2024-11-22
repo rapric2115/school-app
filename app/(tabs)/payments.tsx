@@ -20,7 +20,7 @@ const Payments = (props: any) => {
     const context = useContext(AppContext);
     const [checkedItems, setCheckedItems] = useState<boolean[]>([]);
     const [tuitionAmount, setTuitionAmount] = useState<number>(0); // Initialize to 0
-    const [comprobanteFiscal, setComprobanteFiscal] = useState<boolean[]>([]);
+    const [comprobanteFiscal, setComprobanteFiscal] = useState<boolean>(false);
     const { user, totalTuition, formatCurrency, payment, message } = context;
     const [number, onChangeNumber] = useState<string>(''); // State for input
 

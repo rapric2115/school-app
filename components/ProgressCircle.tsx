@@ -35,6 +35,7 @@ const ProgressCircle: React.FC<ProgressCircleProps> = ({ radius, strokeWidth, pe
                     strokeWidth={strokeWidth}
                     strokeDasharray={circumference}
                     strokeDashoffset={strokeDashoffset}
+                    transform="rotate(-90 50 50)"
                 />
                
             </Svg>
