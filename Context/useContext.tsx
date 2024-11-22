@@ -18,6 +18,14 @@ interface Student {
     tuition: number; // Ensure this matches your Firestore field name
 }
 
+// Define the shape of a credit card object
+interface CreditCard {
+    cardNumber: string; // Changed to string for better handling
+    cardHolder: string;
+    expirationDate: string;
+    CVVNumber: string; // Changed to string for better handling
+}
+
 // Define the shape of the combined context state
 interface AppContextType {
     user: User | null; // User can be null if not logged in
@@ -29,20 +37,22 @@ interface AppContextType {
     totalTuition: number; // Total tuition amount
     message: string;
     payment: (paymentAmount: number) => void; // Payment function declaration
-    formatCurrency: (paymentAmount: number) => void;
+    formatCurrency: (paymentAmount: number) => string;
+    onAddCard: (card: CreditCard) => void; // Updated type for onAddCard
+    creditCards: CreditCard[]; // Changed to non-nullable array
 }
-
 
 // Create a Context with default values
 export const AppContext = createContext<AppContextType | undefined>(undefined);
 
 // Create a Provider Component
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [user, setUser] = useState<User | null>(null); // Initial state can be null or an object
-    const [students, setStudents] = useState<Student[] | null>(null); // State for students
-    const [loading, setLoading] = useState<boolean>(false); // State for loading
-    const [totalTuition, setTotalTuition] = useState<number>(0); // State for total tuition
-    const [message, setMessage] = useState<string>(''); // State for
+    const [user, setUser] = useState<User | null>(null); 
+    const [students, setStudents] = useState<Student[] | null>(null); 
+    const [loading, setLoading] = useState<boolean>(false); 
+    const [totalTuition, setTotalTuition] = useState<number>(0); 
+    const [message, setMessage] = useState<string>(''); 
+    const [creditCards, setCreditCards] = useState<CreditCard[]>([]); // Initialize as an empty array
 
     const formatCurrency = (amount: number): string => {
         return new Intl.NumberFormat('en-US', {
@@ -54,29 +64,25 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     };
 
     const payment = (paymentAmount: number) => {
-        setMessage('Your Payment is being Process, please wait until confirmation...');
-     if(totalTuition >= 0) {
-         // Simulate processing time with a timeout
-         setTimeout(() => {
-             // Update total tuition only if paymentAmount is valid
-             if (paymentAmount > 0) {
-                 setTotalTuition(prevTotal => prevTotal - paymentAmount);
-                 setMessage(`Your Payment is Complete. You paid US ${formatCurrency(paymentAmount)} for your Tuition.`);
-
-                 setTimeout(() => {
-                    setMessage('')
-                 }, 5000)
-             } else {
-                 setMessage('Invalid payment amount.');
-             }
-         }, 7000); // Simulate a 7-second processing time
-         
-     } 
+        setMessage('Your Payment is being processed...');
+        if (totalTuition >= 0) {
+            setTimeout(() => {
+                if (paymentAmount > 0) {
+                    setTotalTuition(prevTotal => prevTotal - paymentAmount);
+                    setMessage(`Your Payment is Complete. You paid US ${formatCurrency(paymentAmount)} for your Tuition.`);
+                    setTimeout(() => {
+                        setMessage('');
+                    }, 5000);
+                } else {
+                    setMessage('Invalid payment amount.');
+                }
+            }, 7000);
+        }
     };
 
     useEffect(() => {
         const fetchStudentData = async () => {
-            setLoading(true); // Set loading to true before fetching data
+            setLoading(true);
             try {
                 const db = getFirestore(app);
                 const querySnapshot = await getDocs(collection(db, "students"));
@@ -87,30 +93,32 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
                     const studentData = { id: doc.id, ...doc.data() } as Student;
                     studentsData.push(studentData);
 
-                    // Correctly access the tuition property from each student object
                     if (studentData.tuition) {
-                        totalTuitionAmount += studentData.tuition; // Sum up tuition payments
+                        totalTuitionAmount += studentData.tuition;
                     }
                 });
-                
-                setStudents(studentsData); // Update state with fetched data
-                setTotalTuition(totalTuitionAmount); // Set total tuition amount
+
+                setStudents(studentsData);
+                setTotalTuition(totalTuitionAmount);
             } catch (error) {
-                console.error("Error fetching student data: ", error);
+                console.error("Error fetching student data:", error);
             } finally {
-                setLoading(false); // Set loading to false after fetching is complete
+                setLoading(false);
             }
         };
 
-        fetchStudentData(); // Call the fetch function
-
+        fetchStudentData();
         
-    }, []); // Empty dependency array means this runs once on mount
+    }, []);
+
+    const onAddCard = (card: CreditCard) => {
+        setCreditCards(prevCards => [...prevCards, card]); // Add new card to existing cards
+        console.log('Updated Credit Cards:', [...creditCards, card]); // Log updated credit cards for debugging
+    };
 
     return (
-        <AppContext.Provider value={{ user, setUser, students, setStudents, loading, setLoading, totalTuition, message, payment,
-            formatCurrency
-         }}>
+        <AppContext.Provider value={{ user, setUser, students, setStudents, loading, setLoading,
+            totalTuition, message, payment, formatCurrency, onAddCard, creditCards }}>
             {children}
         </AppContext.Provider>
     );

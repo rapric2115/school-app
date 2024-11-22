@@ -6,7 +6,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppContext } from '../../Context/useContext';
-import { BtnColor, ComponentBG } from '../../constants/Colors';
+import { BtnColor, ComponentBG, Colors } from '../../constants/Colors';
 
 import NotificationMessage from '@/components/NotificationMessage';
 import CredictCardIcon from '../../assets/tabIcons/credictCard_icon';
@@ -85,7 +85,7 @@ const Payments = (props: any) => {
     };
 
   return (
-    <ScrollView style={styles.Container}>      
+    <ScrollView style={styles.ScrollViewContainer}>      
       <ThemedView style={styles.Container}>
           <ThemedView style={styles.titleContainer}>
               <ThemedText type="title">Welcome! {user.name}</ThemedText>
@@ -164,6 +164,10 @@ const Payments = (props: any) => {
 };
 
 const styles = StyleSheet.create({
+  ScrollViewContainer: {
+    flex: 1,
+    backgroundColor: Colors.dark.background
+  },
     Container: {
         flex: 1,
         marginTop: 20

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { StyleSheet, Image, Platform } from 'react-native';
+import { StyleSheet, Image, Platform, Dimensions, ScrollView } from 'react-native';
 
 import { Collapsible } from '@/components/Collapsible';
 import { ExternalLink } from '@/components/ExternalLink';
@@ -8,12 +8,20 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import { AppContext } from '../../Context/useContext';
+import ProgressCircle from '@/components/ProgressCircle';
+import { ComponentBG, Colors } from '@/constants/Colors';
+
+const WIDTH = Dimensions.get('screen').width;
 
 export default function TabTwoScreen() {
   const context = useContext(AppContext);
-  const { user } = context;
+  const { user, totalTuition, formatCurrency } = context;
+
+  const totalPaid = 1381.64;
+  const percentage = Math.floor((totalPaid / totalTuition) * 100);
 
   return (
+    <ScrollView style={styles.ScrollContainer}>
     <ThemedView style={styles.Container}>
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Welcome! {user.name}</ThemedText>
@@ -22,83 +30,71 @@ export default function TabTwoScreen() {
       <ThemedView>
         <ThemedText style={{marginLeft: 15}}>Statement</ThemedText>
       </ThemedView>
-      <ThemedText>This app includes example code to help you get started.</ThemedText>
-      <Collapsible title="File-based routing">
-        <ThemedText>
-          This app has two screens:{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/explore.tsx</ThemedText>
+
+     <ThemedView style={styles.installmentContainer}>
+        <ThemedView style={{backgroundColor: ComponentBG.dark.backgroundColor, width: WIDTH * .50}}>
+          <ThemedText style={[styles.title, {marginBottom: 10}]}>Installments</ThemedText>
+          <ThemedText style={styles.title}>Total  US {formatCurrency(totalTuition)}</ThemedText>
+          <ThemedText style={styles.title}>Paid US {formatCurrency(totalPaid)}</ThemedText>
+          <ThemedText style={styles.title}>Left US {formatCurrency(totalTuition - totalPaid)}</ThemedText>
+        </ThemedView>
+        <ThemedView style={{backgroundColor: ComponentBG.dark.backgroundColor, width: WIDTH * .40, justifyContent: 'center'}}>
+         <ProgressCircle radius={50} strokeWidth={5} percentage={percentage} color="white" />
+        </ThemedView>
+     </ThemedView>
+     <ThemedText style={{marginVertical: 10, marginLeft: 10}}>History</ThemedText>
+     <ThemedView>
+     <ThemedView style={[styles.table, {backgroundColor: ComponentBG.dark.backgroundColor}]}>
+            {/* Header Row */}
+            <ThemedView style={[styles.row, {backgroundColor: ComponentBG.dark.backgroundColor}]}>
+                <ThemedText style={styles.headerCell}>Description</ThemedText>
+                <ThemedText style={styles.headerCell}>Date</ThemedText>
+                <ThemedText style={styles.headerCell}>Late Feed</ThemedText>
+                <ThemedText style={styles.headerCell}>Amount Paid</ThemedText>
+            </ThemedView>
+
+            {/* Data Rows */}
+            {Array.from({ length: 4 }).map((_, index) => (
+                <ThemedView key={index} style={[styles.row, {backgroundColor: ComponentBG.dark.backgroundColor}]}>
+                    <ThemedText style={styles.cell}>Inscription</ThemedText>
+                    <ThemedText style={styles.cell}>Row {index + 1} </ThemedText>
+                    <ThemedText style={styles.cell}>Row {index + 1} </ThemedText>
+                    <ThemedText style={styles.cell}>Row {index + 1} </ThemedText>
+                </ThemedView>
+            ))}
+            <ThemedView style={[styles.row, {backgroundColor: ComponentBG.dark.backgroundColor}]}>
+              <ThemedText style={styles.headerCell}>Total</ThemedText>
+                <ThemedText style={styles.headerCell}></ThemedText>
+                <ThemedText style={styles.headerCell}>Late Feed Total</ThemedText>
+                <ThemedText style={styles.headerCell}>Total</ThemedText>
+            </ThemedView>
+        </ThemedView>
+     </ThemedView>
+     <ThemedView style={{justifyContent: 'center', width: WIDTH * .95, marginTop: 10}}>
+        <ThemedText style={{justifyContent: 'center', alignSelf: 'center', padding: 8}}>
+          For full payment of tuition before the start 
+          of schooling, there will be a 10% discount,
+          and 5% will be charged for late payment.
         </ThemedText>
-        <ThemedText>
-          The layout file in <ThemedText type="defaultSemiBold">app/(tabs)/_layout.tsx</ThemedText>{' '}
-          sets up the tab navigator.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/router/introduction">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Android, iOS, and web support">
-        <ThemedText>
-          You can open this project on Android, iOS, and the web. To open the web version, press{' '}
-          <ThemedText type="defaultSemiBold">w</ThemedText> in the terminal running this project.
-        </ThemedText>
-      </Collapsible>
-      <Collapsible title="Images">
-        <ThemedText>
-          For static images, you can use the <ThemedText type="defaultSemiBold">@2x</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">@3x</ThemedText> suffixes to provide files for
-          different screen densities
-        </ThemedText>
-        <Image source={require('@/assets/images/react-logo.png')} style={{ alignSelf: 'center' }} />
-        <ExternalLink href="https://reactnative.dev/docs/images">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Custom fonts">
-        <ThemedText>
-          Open <ThemedText type="defaultSemiBold">app/_layout.tsx</ThemedText> to see how to load{' '}
-          <ThemedText style={{ fontFamily: 'SpaceMono' }}>
-            custom fonts such as this one.
-          </ThemedText>
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/versions/latest/sdk/font">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Light and dark mode components">
-        <ThemedText>
-          This template has light and dark mode support. The{' '}
-          <ThemedText type="defaultSemiBold">useColorScheme()</ThemedText> hook lets you inspect
-          what the user's current color scheme is, and so you can adjust UI colors accordingly.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Animations">
-        <ThemedText>
-          This template includes an example of an animated component. The{' '}
-          <ThemedText type="defaultSemiBold">components/HelloWave.tsx</ThemedText> component uses
-          the powerful <ThemedText type="defaultSemiBold">react-native-reanimated</ThemedText>{' '}
-          library to create a waving hand animation.
-        </ThemedText>
-        {Platform.select({
-          ios: (
-            <ThemedText>
-              The <ThemedText type="defaultSemiBold">components/ParallaxScrollView.tsx</ThemedText>{' '}
-              component provides a parallax effect for the header image.
-            </ThemedText>
-          ),
-        })}
-      </Collapsible>
-      </ThemedView>
+     </ThemedView>
+    </ThemedView>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  ScrollContainer: {
+    flex: 1, 
+    backgroundColor: Colors.dark.background
+  },
   Container: {
     flex: 1,
     marginTop: 30
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'medium',
+    paddingVertical: 3
   },
   headerImage: {
     color: '#808080',
@@ -111,4 +107,36 @@ const styles = StyleSheet.create({
     gap: 8,
     padding: 15
   },
+  installmentContainer: {
+    width: WIDTH * .95,
+    flexDirection: 'row',
+    backgroundColor: ComponentBG.dark.backgroundColor,
+    padding: 15,
+    alignSelf: 'center',
+    marginTop: 20,
+    borderRadius: 10
+  },
+  table: {
+    borderColor: '#ccc',
+    overflow: 'hidden',
+    width: WIDTH * .95,
+    borderRadius: 10,
+    alignSelf: 'center'
+},
+row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 10,
+    width: WIDTH * .95,
+    borderRadius: 10
+},
+headerCell: {
+    fontWeight: 'bold',
+    flex: 1,
+    textAlign: 'center',
+},
+cell: {
+    flex: 1,
+    textAlign: 'center',
+},
 });

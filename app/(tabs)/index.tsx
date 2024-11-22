@@ -10,6 +10,7 @@ import { AppContext } from '../../Context/useContext';
 import AmountInfo from '../../components/amountInfo';
 import StudentInfo from '../../components/studentInfo';
 import NotificationMessage  from '../../components/NotificationMessage';
+import { Colors } from '../../constants/Colors';
 
 export default function HomeScreen() {
   const context = useContext(AppContext);
@@ -27,7 +28,7 @@ export default function HomeScreen() {
   };
 
   return (
-    <ScrollView>
+    <ScrollView style={{flex: 1, backgroundColor: Colors.dark.background}}>
     <ThemedView style={styles.container}>
        {user ? (
                 <ThemedView style={styles.info}>
@@ -42,7 +43,10 @@ export default function HomeScreen() {
                     <ThemedView style={styles.info}>
                     {students ? 
                       <StudentInfo />
-                    : 'No Student Assigned'  
+                    : 
+                    <ThemedText>
+                      No Student Assigned 
+                    </ThemedText>
                     }
                     </ThemedView>
                   </ThemedView>

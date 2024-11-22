@@ -66,6 +66,12 @@ export default function TabLayout() {
           }}
         />
         ))}
+        <Tabs.Screen 
+          name="modal"
+          options={{
+            href: null
+          }}
+          />
       
     </Tabs>
   );
