@@ -44,6 +44,7 @@ const Wallet = () => {
 
     return (
         <ScrollView style={{ flex: 1, backgroundColor: Colors.dark.background }}>
+          <SafeAreaView>
             <ThemedView style={styles.Container}>
                 <ThemedView style={styles.titleContainer}>
                     <ThemedText type="title">Welcome! {user?.name}</ThemedText>
@@ -85,8 +86,8 @@ const Wallet = () => {
                 <Link style={styles.button} href='/modal'>
                     <Text style={styles.buttonText}>+</Text>
                 </Link>
-                <SafeAreaView />
             </ThemedView>
+          </SafeAreaView>
         </ScrollView>
     );
 };

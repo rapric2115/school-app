@@ -21,8 +21,15 @@ const Payments = (props: any) => {
     const [checkedItems, setCheckedItems] = useState<boolean[]>([]);
     const [tuitionAmount, setTuitionAmount] = useState<number>(0); // Initialize to 0
     const [comprobanteFiscal, setComprobanteFiscal] = useState<boolean>(false);
-    const { user, totalTuition, formatCurrency, payment, message } = context;
     const [number, onChangeNumber] = useState<string>(''); // State for input
+
+     // Check if context is defined
+     if (!context) {
+      console.error("AppContext is not available");
+      return null; // or some fallback UI
+  }
+  
+    const { user, totalTuition, formatCurrency, payment, message } = context;
 
     const payment_Options = [
       {

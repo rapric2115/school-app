@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react';
-import { StyleSheet, TextInput, View, Pressable, Dimensions } from 'react-native';
+import { StyleSheet, TextInput, View, Pressable, Dimensions, KeyboardAvoidingView, Platform } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { AppContext } from '../../Context/useContext';
-import { BtnColor } from '@/constants/Colors';
+import { BtnColor, Colors } from '@/constants/Colors';
 import { Link, router } from 'expo-router';
 
 const WIDTH = Dimensions.get('screen').width;
@@ -17,69 +17,73 @@ export default function Modal() {
     
     const context = useContext(AppContext);
     
-   if (!context) return null; // Ensure context is available
+    if (!context) return null; // Ensure context is available
 
-   const { onAddCard, creditCards } = context;
+    const { onAddCard } = context;
 
-   const handleAddCard = () => {
-       if (cardNumber && cardHolder && expirationDate && CVVNumber) {
-           onAddCard({ cardNumber, cardHolder, expirationDate, CVVNumber });
-           // Clear fields after adding
-           setCardNumber('');
-           setCardHolder('');
-           setExpirationDate('');
-           setCVVNumber('');
-       }
-   };
-   const handleCancelCard = () => {
-     alert('Close the modal')
-   }
+    const handleAddCard = () => {
+        if (cardNumber && cardHolder && expirationDate && CVVNumber) {
+            onAddCard({ cardNumber, cardHolder, expirationDate, CVVNumber });
+            // Clear fields after adding
+            setCardNumber('');
+            setCardHolder('');
+            setExpirationDate('');
+            setCVVNumber('');
+        }
+    };
 
-   return (
-       <ThemedView style={styles.container}>
-           <ThemedText>Add Credit Card</ThemedText>
-           <ThemedView style={styles.modalContent}>
-               <TextInput
-                   style={styles.input}
-                   placeholder="Card Number"
-                   value={cardNumber}
-                   onChangeText={setCardNumber}
-                   keyboardType="numeric"
-               />
-               <TextInput
-                   style={styles.input}
-                   placeholder="Card Holder Name"
-                   value={cardHolder}
-                   onChangeText={setCardHolder}
-               />
-               <ThemedView style={{flexDirection: 'row', gap: 5}}>
+    const handleCancelCard = () => {
+        alert('Close the modal');
+    };
+
+    return (
+        <KeyboardAvoidingView 
+            style={styles.container} 
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            keyboardVerticalOffset={0} // Adjust this value based on your header height
+        >
+            <ThemedView style={styles.modalContent}>
+                <ThemedText>Add Credit Card</ThemedText>
                 <TextInput
-                    style={styles.input_width_50}
-                    placeholder="Expiration Date (MM/YY)"
-                    value={expirationDate}
-                    onChangeText={setExpirationDate}
-                    keyboardType="numeric"
+                    style={styles.input}
+                    placeholder="Card Number"
+                    value={cardNumber}
+                    onChangeText={setCardNumber}
+                    keyboardType="number-pad"
                 />
                 <TextInput
-                    style={styles.input_width_50}
-                    placeholder="CVV Number"
-                    value={CVVNumber}
-                    onChangeText={setCVVNumber}
-                    keyboardType="numeric"
+                    style={styles.input}
+                    placeholder="Card Holder Name"
+                    value={cardHolder}
+                    onChangeText={setCardHolder}
                 />
-               </ThemedView>
-               <ThemedView style={{flexDirection: 'row', gap: 10}}>
-               <Pressable style={styles.Cancel_button} onPress={handleCancelCard}>
-                   <ThemedText style={styles.buttonText}>Cancel</ThemedText>
-               </Pressable>
-              
-               <Pressable style={styles.button} onPress={handleAddCard}>
-                   <ThemedText style={styles.buttonText}>Add Card</ThemedText>
-               </Pressable>
-               </ThemedView>
-           </ThemedView>
-       </ThemedView>
-   );
+                <ThemedView style={{ flexDirection: 'row', gap: 5 }}>
+                    <TextInput
+                        style={styles.input_width_50}
+                        placeholder="Expiration Date (MM/YY)"
+                        value={expirationDate}
+                        onChangeText={setExpirationDate}
+                        keyboardType="number-pad"
+                    />
+                    <TextInput
+                        style={styles.input_width_50}
+                        placeholder="CVV Number"
+                        value={CVVNumber}
+                        onChangeText={setCVVNumber}
+                        keyboardType="number-pad"
+                    />
+                </ThemedView>
+                <ThemedView style={{ flexDirection: 'row', gap: 10 }}>
+                    <Pressable style={styles.Cancel_button} onPress={handleCancelCard}>
+                        <ThemedText style={styles.buttonText}>Cancel</ThemedText>
+                    </Pressable>
+                    <Pressable style={styles.button} onPress={handleAddCard}>
+                        <ThemedText style={styles.buttonText}>Add Card</ThemedText>
+                    </Pressable>
+                </ThemedView>
+            </ThemedView>
+        </KeyboardAvoidingView>
+    );
 }
 
 const styles = StyleSheet.create({
@@ -87,6 +91,7 @@ const styles = StyleSheet.create({
        flex: 1,
        alignItems: 'center',
        justifyContent: 'center',
+       backgroundColor: Colors.dark.background
    },
    modalContent: {
     //    backgroundColor: ComponentBG.dark.backgroundColor,

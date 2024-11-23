@@ -5,6 +5,8 @@ import { ThemedText } from '@/components/ThemedText';
 import { ComponentBG, BtnColor } from '../constants/Colors';
 import { AppContext } from '@/Context/useContext';
 
+import { Link } from 'expo-router';
+
 const WIDTH = Dimensions.get("screen").width;
 const HEIGHT = Dimensions.get("screen").height;
 
@@ -36,9 +38,9 @@ const StudentInfo = () => {
                 </ThemedText>
                 <ThemedText style={styles.grade} type='defaultSemiBold'>{student.grade}</ThemedText>
                 <ThemedText>{student.information}</ThemedText>
-                <Pressable onPress={() => alert(`You press my profile ${student.given_name}`)} style={styles.btn}>
+                <Link href="/StudentProfile" style={styles.btn}>
                   <ThemedText style={styles.btnText}>Go to {student.given_name} Profile</ThemedText>
-                </Pressable>
+                </Link >
               </View>
         </ThemedView>
       ))}
@@ -78,10 +80,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
     marginTop: 10,
-    marginBottom: 10
+    marginBottom: 10,
+    paddingTop: 10
   },
   btnText: {
     textAlign: 'center',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    
   }
 });
