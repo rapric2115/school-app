@@ -112,8 +112,10 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     }, []);
 
     const onAddCard = (card: CreditCard) => {
-        setCreditCards(prevCards => [...prevCards, card]); // Add new card to existing cards
-        console.log('Updated Credit Cards:', [...creditCards, card]); // Log updated credit cards for debugging
+        // Ensure that this function is not called during render.
+        console.log('Adding card:', card); // Debugging log for card addition.
+        setCreditCards(prevCards => [...prevCards, card]); // Add new card to existing cards.
+        console.log('Updated Credit Cards:', [...creditCards, card]); // Log updated credit cards for debugging.
     };
 
     return (

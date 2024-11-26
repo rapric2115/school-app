@@ -1,19 +1,20 @@
-import React, { useState, useContext } from 'react';
-import { StyleSheet, TextInput, View, Pressable, Dimensions, KeyboardAvoidingView, Platform } from 'react-native';
+import { StyleSheet, Text, View, KeyboardAvoidingView, Platform, TextInput, Dimensions, Pressable } from 'react-native'
+import React, { useContext, useState } from 'react';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { AppContext } from '../../Context/useContext';
-import { BtnColor, Colors } from '@/constants/Colors';
-import { Link, router } from 'expo-router';
+import { AppContext } from '../Context/useContext';
+import { Colors, BtnColor, ComponentBG } from '@/constants/Colors';
 
 const WIDTH = Dimensions.get('screen').width;
 
-export default function Modal() {
+
+
+const CreditCardForm = () => {
     const [cardNumber, setCardNumber] = useState('');
     const [cardHolder, setCardHolder] = useState('');
     const [expirationDate, setExpirationDate] = useState('');
     const [CVVNumber, setCVVNumber] = useState('');
-    const isPresented = router.canGoBack();
+    // const isPresented = router.canGoBack();
     
     const context = useContext(AppContext);
     
@@ -32,16 +33,13 @@ export default function Modal() {
         }
     };
 
-    const handleCancelCard = () => {
-        alert('Close the modal');
-    };
-
-    return (
-        <KeyboardAvoidingView 
+  return (
+      <KeyboardAvoidingView 
             style={styles.container} 
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             keyboardVerticalOffset={0} // Adjust this value based on your header height
-        >
+        > 
+        <ThemedView style={styles.modalContent}>
             <ThemedView style={styles.modalContent}>
                 <ThemedText>Add Credit Card</ThemedText>
                 <TextInput
@@ -57,7 +55,7 @@ export default function Modal() {
                     value={cardHolder}
                     onChangeText={setCardHolder}
                 />
-                <ThemedView style={{ flexDirection: 'row', gap: 5 }}>
+                <ThemedView style={{ flexDirection: 'row', gap: 5, backgroundColor: ComponentBG.light.backgroundColor }}>
                     <TextInput
                         style={styles.input_width_50}
                         placeholder="Expiration Date (MM/YY)"
@@ -73,67 +71,70 @@ export default function Modal() {
                         keyboardType="number-pad"
                     />
                 </ThemedView>
-                <ThemedView style={{ flexDirection: 'row', gap: 10 }}>
-                    <Pressable style={styles.Cancel_button} onPress={handleCancelCard}>
+                <ThemedView style={{ flexDirection: 'row', gap: 10, backgroundColor: ComponentBG.light.backgroundColor }}>
+                    {/* <Pressable style={styles.Cancel_button} onPress={onClose}>
                         <ThemedText style={styles.buttonText}>Cancel</ThemedText>
-                    </Pressable>
+                    </Pressable> */}
                     <Pressable style={styles.button} onPress={handleAddCard}>
                         <ThemedText style={styles.buttonText}>Add Card</ThemedText>
                     </Pressable>
                 </ThemedView>
             </ThemedView>
+        </ThemedView>
         </KeyboardAvoidingView>
-    );
+  )
 }
 
+export default CreditCardForm
+
 const styles = StyleSheet.create({
-   container: {
-       flex: 1,
-       alignItems: 'center',
-       justifyContent: 'center',
-       backgroundColor: Colors.dark.background
-   },
-   modalContent: {
-    //    backgroundColor: ComponentBG.dark.backgroundColor,
-       padding: 20,
-       borderRadius: 10,
-       alignItems: 'center',
-       width: WIDTH * .9,
-   },
-   input: {
-       width: '100%',
-       borderWidth: 1,
-       borderColor:'#ccc',
+    container: {
+        // flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        // backgroundColor: Colors.dark.background
+    },
+    modalContent: {
+        backgroundColor: ComponentBG.light.backgroundColor,
+        padding: 20,
+        borderRadius: 10,
+        alignItems: 'center',
+        width: WIDTH * .9,
+    },
+    input: {
+        width: '100%',
+        borderWidth: 1,
+        borderColor:'#ccc',
+        borderRadius :5,
+        padding :10,
+        marginBottom :15,
+        backgroundColor: '#ccc'
+    },
+    input_width_50: {
+        width: '50%',
+        borderWidth: 1,
+        borderColor:'#ccc',
+        borderRadius :5,
+        padding :10,
+        marginBottom :15,
+        backgroundColor: '#ccc'
+    },
+    button:{
+       backgroundColor: BtnColor.dark.backgroundColor,
+       paddingVertical :10,
+       paddingHorizontal :20,
        borderRadius :5,
-       padding :10,
-       marginBottom :15,
-       backgroundColor: '#ccc'
-   },
-   input_width_50: {
-       width: '50%',
-       borderWidth: 1,
-       borderColor:'#ccc',
-       borderRadius :5,
-       padding :10,
-       marginBottom :15,
-       backgroundColor: '#ccc'
-   },
-   button:{
-      backgroundColor: BtnColor.dark.backgroundColor,
-      paddingVertical :10,
-      paddingHorizontal :20,
-      borderRadius :5,
-      marginBottom :10,
-   },
-   Cancel_button:{
-    backgroundColor: BtnColor.light.backgroundColor,
-    paddingVertical :10,
-    paddingHorizontal :20,
-    borderRadius :5,
-    marginBottom :10,
- },
-   buttonText:{
-      color:'white',
-      fontSize :16,
-   },
-});
+       marginBottom :10,
+    },
+    Cancel_button:{
+     backgroundColor: BtnColor.light.backgroundColor,
+     paddingVertical :10,
+     paddingHorizontal :20,
+     borderRadius :5,
+     marginBottom :10,
+  },
+    buttonText:{
+       color:'white',
+       fontSize :16,
+    },
+ });
